@@ -30,7 +30,8 @@ function App() {
   return (
     <div className="App">
       <header>
-        
+        <h1>Welcome to CultChat</h1>
+        <SignOut />
       </header>
 
       <section>
@@ -54,12 +55,14 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <button className='sign-out' onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
 
 function ChatRoom() {
   // Chatroom for Authed users
+
+  const dummy = useRef();
 
   const messagesRef = firestore.collection('messages');
   const query = messagesRef.orderBy('createdAt').limit(25);
@@ -80,18 +83,24 @@ function ChatRoom() {
       photoURL
     });
     setFormValue('');
+
+    dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   return (
     <>
-      <div>
+      <main>
         {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-      </div>
+
+        <div ref={dummy}>
+
+        </div>
+      </main>
       <form onSubmit={sendMessage}>
 
         <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
 
-        <button type='submit'>Submit</button>
+        <button type='submit'>Post</button>
 
       </form>
     </>
@@ -99,13 +108,13 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid } = props.message;
+  const { text, uid, photoURL } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (
     <div className={`message ${messageClass}`}>
-      <img src={photoURL} />
+      <img src={photoURL || 'https://i.pinimg.com/originals/3f/de/86/3fde8620893d9a399a8f9214c76cdc9a.jpg'} />
       <p>{text}</p>
     </div>
   )
