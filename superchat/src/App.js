@@ -22,7 +22,6 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 
 
-
 function App() {
 
   const [user] = useAuthState(auth);
@@ -49,7 +48,9 @@ function SignIn() {
   }
   
   return (
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <>
+        <button className='sign-in' onClick={signInWithGoogle}>Sign in with Google</button>
+    </>
   )
 }
 
@@ -61,9 +62,7 @@ function SignOut() {
 
 function ChatRoom() {
   // Chatroom for Authed users
-
   const dummy = useRef();
-
   const messagesRef = firestore.collection('messages');
   const query = messagesRef.orderBy('createdAt').limit(25);
 
@@ -92,15 +91,14 @@ function ChatRoom() {
       <main>
         {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
-        <div ref={dummy}>
+        <span ref={dummy}></span>
 
-        </div>
       </main>
       <form onSubmit={sendMessage}>
 
-        <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+        <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder='Share something positve' />
 
-        <button type='submit'>Post</button>
+        <button type='submit' disabled={!formValue}>Post</button>
 
       </form>
     </>
