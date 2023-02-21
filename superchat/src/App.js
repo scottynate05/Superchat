@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -29,8 +29,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <header>
         
       </header>
 
@@ -70,7 +69,7 @@ function ChatRoom() {
   return (
     <>
       <div>
-        {messaages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+        {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
       </div>
     </>
   )
@@ -78,6 +77,8 @@ function ChatRoom() {
 
 function ChatMessage(props) {
   const { text, uid } = props.message;
+
+  
 
   return <p>{text}</p>
 }
