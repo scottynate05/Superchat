@@ -64,7 +64,7 @@ function ChatRoom() {
   // Chatroom for Authed users
   const dummy = useRef();
   const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt').limit(25);
+  const query = messagesRef.orderBy('createdAt').limit(250);
 
   const [messages] = useCollectionData(query, {idField: 'id'});
 
@@ -110,7 +110,10 @@ function ChatMessage(props) {
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
-  const formattedTime = new Date(createdAt.toDate()).toLocaleTimeString();
+  let formattedTime = null;
+  if (createdAt) {
+    formattedTime = new Date(createdAt.toDate()).toLocaleTimeString();
+  }
 
   return (
     <div className={`message ${messageClass}`}>
